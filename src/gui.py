@@ -10,14 +10,18 @@ def get_model_list():
     return [
         name
         for name in os.listdir(model_path)
-        if (os.path.isdir(os.path.join(model_path, name))
-            or os.path.isfile(os.path.join(model_path, name)))
-        and name != "put_models_here"
+        if (
+            os.path.isdir(os.path.join(model_path, name))
+            or os.path.isfile(os.path.join(model_path, name))
+        )
+        and (name != "put_models_here" or name != ".cache")
     ]
 
 
 def refresh_models():
-    return gr.Dropdown.update(choices=get_model_list())
+    # Refresh model list
+    updated_models = get_model_list()
+    return gr.Dropdown(choices=updated_models)
 
 
 def generate_response(modelpath, prompt, img):
@@ -29,7 +33,7 @@ with gr.Blocks() as demo:
     with gr.Row():
         with gr.Column():
             image_input = gr.Image(
-                type="numpy", sources=["upload"], label="Input Image"
+                type="filepath", sources=["upload"], label="Input Image"
             )
             prompt_input = gr.Textbox(
                 label="Prompt", placeholder="Enter your prompt here"
