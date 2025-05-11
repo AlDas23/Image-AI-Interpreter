@@ -14,7 +14,7 @@ def get_model_list():
             os.path.isdir(os.path.join(model_path, name))
             or os.path.isfile(os.path.join(model_path, name))
         )
-        and (name != "put_models_here" or name != ".cache")
+        and name != "put_models_here" and name != ".cache"
     ]
 
 
